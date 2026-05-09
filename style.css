@@ -1,6 +1,9 @@
 body {
     text-align: center;
 }
+h2 {
+    cursor:pointer;
+}
 
 .btn {
     height: 150px;
@@ -8,12 +11,25 @@ body {
     border-radius: 20%;
     border: 10px solid black;
     margin: 0.5rem;
+    cursor: pointer;
+     /* Prevent text selection / callout on long-press on mobile */
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    touch-action: manipulation;
 }
 
 .btn-container {
     display: flex;
     justify-content: center;
     
+}
+
+/* Make buttons a bit smaller on small screens */
+@media (max-width: 400px) {
+    .btn {
+        height: 120px;
+        width: 120px;
+    }
 }
 
 .red {
