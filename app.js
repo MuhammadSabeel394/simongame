@@ -8,13 +8,27 @@ let level = 0;
 
 let h2 = document.querySelector("h2");
 
-document.addEventListener("keypress", function () {
+// Start game on keypress (desktop) OR tap on the heading/body (mobile)
+function startGame() {
     if (started == false) {
         console.log("Game started");
         started = true;
         levelUp();
     }
+}
+
+document.addEventListener("keypress", startGame);
+
+// Tap anywhere on screen to start (mobile support)
+document.addEventListener("touchstart", function (e) {
+    // Only trigger start if tapping outside the game buttons
+    if (!e.target.classList.contains("btn")) {
+        startGame();
+    }
 });
+
+// Also allow clicking the h2 prompt directly
+h2.addEventListener("click", startGame);
 
 function gameFlash(btn) {
     btn.classList.add("flash");
@@ -53,30 +67,34 @@ function checkSeq(idx) {
         }
     }
     else {
-        h2.innerHTML = `Game Over! <b>Your Score Was ${level}</b> <br>Press any key to start the game`;
+        h2.innerHTML = `Game Over! <b>Your Score Was ${level}</b> <br>Press any key or tap to start again`;
         document.querySelector("body").style.backgroundColor = "red";
-        setTimeout (function () {
-             document.querySelector("body").style.backgroundColor = "white";
-        }, 170)
+        setTimeout(function () {
+            document.querySelector("body").style.backgroundColor = "white";
+        }, 170);
         reset();
     }
 }
 
 function btnPress() {
-    console.log(this);
-    let btn = this
+    let btn = this;
     userflash(btn);
 
     userColor = btn.getAttribute("id");
     userSeq.push(userColor);
 
-    checkSeq(userSeq.length-1);
+    checkSeq(userSeq.length - 1);
 }
 
 let allBtns = document.querySelectorAll(".btn");
 
 for (btn of allBtns) {
     btn.addEventListener("click", btnPress);
+    // Touch support for each button
+    btn.addEventListener("touchstart", function (e) {
+        e.preventDefault(); // Prevent ghost click on mobile
+        btnPress.call(this);
+    });
 }
 
 function reset() {
